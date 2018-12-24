@@ -50,10 +50,10 @@ var resultData = [];
         return;
     }
 
-    // 初始化任务集合
+    console.log('初始化任务集合')
     tasks = initRandomArray(_taskNum, taskLengthRange);
 
-    // 初始化节点集合
+    console.log('初始化节点集合')
     nodes = initRandomArray(_nodeNum, nodeSpeendRange);
     debugger;
 
@@ -165,6 +165,7 @@ function calSelectionProbability(adaptability) {
     for (var i=0; i<chromosomeNum; i++) {
         selectionProbability.push(adaptability[i] / sumAdaptability);
     }
+
 }
 
 /**
@@ -323,7 +324,6 @@ function createGeneration(chromosomeMatrix) {
 
     // 计算当前染色体的任务处理时间
     calTime_oneIt(newChromosomeMatrix);
-
     return newChromosomeMatrix;
 }
 
