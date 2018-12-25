@@ -62,7 +62,7 @@ var resultData = [];
 
     // 渲染视图
     draw(resultData);
-    // console.log(resultData);
+
 })(100, 10, 100, 100, 0.2);
 
 
@@ -126,27 +126,14 @@ function checkParam(_taskNum, _nodeNum, _iteratorNum, _chromosomeNum, _cp) {
  */
 function calAdaptability(chromosomeMatrix) {
     adaptability = [];
-
     // 计算每条染色体的任务长度
-    for (var chromosomeIndex=0; chromosomeIndex<chromosomeNum; chromosomeIndex++) {
-        var maxLength = Number.MIN_VALUE;
-        for (var nodeIndex=0; nodeIndex<nodeNum; nodeIndex++) {
-            var sumLength = 0;
-            for (var taskIndex=0; taskIndex<taskNum; taskIndex++) {
-                if (chromosomeMatrix[chromosomeIndex][taskIndex] == nodeIndex) {
-                    sumLength += timeMatrix[taskIndex][nodeIndex];
-                }
-            }
-
-            if (sumLength > maxLength) {
-                maxLength = sumLength;
-            }
-        }
-
+    var chromosomeTaskLengths = calTaskLengthOfEachChromosome(chromosomeMatrix);
+    for (var i=0; i<chromosomeTaskLengths.length; ++i) {
         // 适应度 = 1/任务长度
-        adaptability.push(1/maxLength);
+        adaptability.push(1/chromosomeTaskLengths[i]);
     }
 }
+
 
 /**
  * 计算自然选择概率
@@ -268,8 +255,16 @@ function copy(chromosomeMatrix, newChromosomeMatrix) {
  * @param chromosomeMatrix
  */
 function calTime_oneIt(chromosomeMatrix) {
-    // 计算每条染色体的任务长度
-    var timeArray_oneIt = [];
+    resultData.push(calTaskLengthOfEachChromosome(chromosomeMatrix));
+}
+
+
+/**
+ * 计算每条染色体的任务长度
+ * @param chromosomeMatrix
+ */
+function calTaskLengthOfEachChromosome(chromosomeMatrix) {
+    var chromosomeTaskLengths = [];
     for (var chromosomeIndex=0; chromosomeIndex<chromosomeNum; chromosomeIndex++) {
         var maxLength = Number.MIN_VALUE;
         for (var nodeIndex=0; nodeIndex<nodeNum; nodeIndex++) {
@@ -279,16 +274,15 @@ function calTime_oneIt(chromosomeMatrix) {
                     sumLength += timeMatrix[taskIndex][nodeIndex];
                 }
             }
-
             if (sumLength > maxLength) {
                 maxLength = sumLength;
             }
         }
-
-        timeArray_oneIt.push(maxLength);
+        chromosomeTaskLengths.push(maxLength);
     }
-    resultData.push(timeArray_oneIt);
+    return chromosomeTaskLengths;
 }
+
 
 /**
  * 繁衍新一代染色体
@@ -309,6 +303,7 @@ function createGeneration(chromosomeMatrix) {
 
         // 计算当前染色体的任务处理时间
         calTime_oneIt(newChromosomeMatrix);
+        
         return newChromosomeMatrix;
     }
 
@@ -323,7 +318,6 @@ function createGeneration(chromosomeMatrix) {
 
     // 计算当前染色体的任务处理时间
     calTime_oneIt(newChromosomeMatrix);
-
     return newChromosomeMatrix;
 }
 
