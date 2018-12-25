@@ -22,9 +22,9 @@ class GA(object):
 
     def ga(self):
         # 任务
-        tasks = self.initRandomArray(self.taskNum, self.taskLengthRange)
+        self.tasks = self.initRandomArray(self.taskNum, self.taskLengthRange)
         # 处理节点
-        nodes = self.initRandomArray(self.nodeNum, self.nodeSpeedRange)
+        self.nodes = self.initRandomArray(self.nodeNum, self.nodeSpeedRange)
         # 初始化任务处理时间矩阵
         self.initTimeMatrix()
         # 初始化第一代染色体
@@ -92,7 +92,7 @@ class GA(object):
         chromosomeTaskLengths = self.calTaskLengthOfEachChromosome(chromosomeMatrix)
         # 计算染色体适应度
         for i in range(len(chromosomeTaskLengths)):
-            adaptabilitity.append(1/chromosomeTaskLengths[i])
+            adaptabilitity.append(1.0/chromosomeTaskLengths[i])
         return adaptabilitity
 
 
